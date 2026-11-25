@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h1>Кликов: <span id="num"></span></h1>
+    <button onclick="sendClick()">Нажми меня!</button>
+    <button onclick="restore()">Сброс</button>
+    <button onclick="addClicks()">Добавить 100 кликов</button>
+
+
+
+    <script>
+        async function sendClick() {
+            let response = await fetch('/click');
+            let newCount = await response.text();
+            document.getElementById('num').innerText = newCount;
+        }
+
+        async function restore() {
+            let responce = await fetch("/restore");
+            let newCountRestore = await responce.text();
+            document.getElementById("num").innerText = newCountRestore;
+        }
+
+        async function addClicks() {
+            let responce = await fetch("/addclicks");
+            let newCount = await responce.text();
+            document.getElementById("num").innerText = newCount;
+        }
+
+        async function loadClicks() {
+            let responce = await fetch("/loadClicks");
+            let currentCount = await responce.text();
+            document.getElementById("num").innerText = currentCount;
+        }
+    </script>
+</body>
+</html>
