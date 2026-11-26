@@ -9,17 +9,27 @@ import (
 var btn_count int
 
 func click(w http.ResponseWriter, r *http.Request) {
-	btn_count += 1
+	if btn_count < 50 {
+		btn_count += 1
+	} else if btn_count >= 50 && btn_count <= 149 {
+		btn_count += 2
+	} else if btn_count >= 150 && btn_count <= 299 {
+		btn_count += 4
+	} else if btn_count >= 300 && btn_count <= 699 {
+		btn_count += 6
+	} else if btn_count >= 700 && btn_count <= 999 {
+		btn_count += 10
+	} else if btn_count >= 1000 && btn_count <= 1500 {
+		btn_count += 11
+	} else {
+		btn_count += 12
+	}
+
 	fmt.Fprint(w, btn_count)
 }
 
 func restore(w http.ResponseWriter, r *http.Request) {
 	btn_count = 0
-	fmt.Fprint(w, btn_count)
-}
-
-func addclicks(w http.ResponseWriter, r *http.Request) {
-	btn_count = btn_count + 100 // or btn_count += 100
 	fmt.Fprint(w, btn_count)
 }
 
@@ -35,7 +45,6 @@ func main() {
 
 	http.HandleFunc("/click", click)
 	http.HandleFunc("/restore", restore)
-	http.HandleFunc("/addclicks", addclicks)
 	http.HandleFunc("/loadClicks", loadClicks)
 
 	fmt.Println("Сервер запущен: http://localhost:8080")

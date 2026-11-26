@@ -21,11 +21,6 @@
             document.getElementById("num").innerText = newCountRestore;
         }
 
-        async function addClicks() {
-            let responce = await fetch("/addclicks");
-            let newCount = await responce.text();
-            document.getElementById("num").innerText = newCount;
-        }
 
         async function loadClicks() {
             let responce = await fetch("/loadClicks");
