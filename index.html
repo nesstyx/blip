@@ -4,7 +4,6 @@
     <h1>Кликов: <span id="num"></span></h1>
     <button onclick="sendClick()">Нажми меня!</button>
     <button onclick="restore()">Сброс</button>
-    <button onclick="addClicks()">Добавить 100 кликов</button>
 
 
 
@@ -16,6 +15,7 @@
         }
 
         async function restore() {
+            if (!confirm("Точно сбросить?")) return;
             let responce = await fetch("/restore");
             let newCountRestore = await responce.text();
             document.getElementById("num").innerText = newCountRestore;
