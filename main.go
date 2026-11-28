@@ -46,17 +46,18 @@ func saveClicks() {
 	os.WriteFile("count.txt", []byte(strconv.Itoa(btn_count)), 0644)
 }
 
-func loadClicksFile() {
+func loadClicksFile() error {
 	data, err := os.ReadFile("count.txt")
 
 	if err != nil {
-		return
+		return fmt.Errorf("С файлом count.txt что то не так..", err)
 	}
 	n, err := strconv.Atoi(strings.TrimSpace(string(data)))
 	if err != nil {
-		return
+		return fmt.Errorf("С файлом count.txt что то не так..", err)
 	}
 	btn_count = n
+	return nil
 }
 
 func main() {
