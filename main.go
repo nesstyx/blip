@@ -3,7 +3,9 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"strconv"
+	"strings"
 )
 
 var btn_count int
@@ -25,11 +27,13 @@ func click(w http.ResponseWriter, r *http.Request) {
 		btn_count += 12
 	}
 
+	saveClicks()
 	fmt.Fprint(w, btn_count)
 }
 
 func restore(w http.ResponseWriter, r *http.Request) {
 	btn_count = 0
+	saveClicks()
 	fmt.Fprint(w, btn_count)
 }
 
@@ -38,7 +42,25 @@ func loadClicks(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, btnCountStr)
 }
 
+func saveClicks() {
+	os.WriteFile("count.txt", []byte(strconv.Itoa(btn_count)), 0644)
+}
+
+func loadClicksFile() {
+	data, err := os.ReadFile("count.txt")
+
+	if err != nil {
+		return
+	}
+	n, err := strconv.Atoi(strings.TrimSpace(string(data)))
+	if err != nil {
+		return
+	}
+	btn_count = n
+}
+
 func main() {
+	loadClicksFile()
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "index.html")
 	})
@@ -48,5 +70,8 @@ func main() {
 	http.HandleFunc("/loadClicks", loadClicks)
 
 	fmt.Println("Сервер запущен: http://localhost:8080")
-	http.ListenAndServe(":8080", nil)
+	err := http.ListenAndServe(":8080", nil)
+	if err != nil {
+		fmt.Println("Не удалось запустить сервер: ", err)
+	}
 }
